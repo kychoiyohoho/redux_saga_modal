@@ -1,6 +1,6 @@
 import { Button, ButtonBase } from '@mui/material';
 import { AgGridReact } from 'ag-grid-react'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux';
 import { addOneRowReducer } from '../stores/action';
 import { useSelector } from 'react-redux';
@@ -52,15 +52,16 @@ const nextId = useRef(0);
   }
 
 
- 
 
+  //테이블 index 로 아이디 순차적으로 진행
  const pushDataToRow=(props)=>{
-  const tableData = {...props,row:props.row.map(({...item})=>({...item,id:nextId.current +=1}))}
+  const tableData = {...props,row:props.row.map(({...item},idx)=>({...item,id:idx+1}))}
   
    setAddRowData(tableData.row);
   
    console.log("tableData",tableData.row);
  }
+ 
   return (
     <>
       
