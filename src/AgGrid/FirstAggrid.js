@@ -1,19 +1,26 @@
-import { Button, ButtonBase } from '@mui/material';
+import { Button } from '@mui/material';
 import { AgGridReact } from 'ag-grid-react'
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useEffect,  useState } from 'react'
 import { useDispatch } from 'react-redux';
-import { addOneRowReducer } from '../stores/action';
+import { addOneRowReducer, regisSpecDoc } from '../stores/action';
 import { useSelector } from 'react-redux';
 
 const FirstAggrid = () => {
   const[addRowData,setAddRowData]=useState();
+  const [specDoc, setSpecDoc] = useState();
   const dispatch=useDispatch();
     const columnDefs = [
-        { headerName: "ID", field: "id" },
+        { headerName: "ID", field: "id",checkboxSelection:true,headerCheckboxSelection:true },
         { headerName: "Name", field: "name" },
         { headerName: "Email", field: "email" },
         { headerName: "Phone", field: "phone" },
         { headerName: "Date of Birth", field: "dob" },
+        {headerName:"변경사항저장",
+        field:"modifiedData",
+        cellRendererFramework:(params) =>(
+          <input type="checkbox" name="xxx"></input>
+        )
+      }
        ];
    
  
@@ -24,6 +31,7 @@ const FirstAggrid = () => {
         editable: true
         
       };
+     
     const onCellClicked =(e)=>{
             console.log(e.data);
           }
@@ -44,7 +52,8 @@ useEffect(()=>{
 },[]);
 
 const rowData=useSelector(state =>state.SpecDocReducer);
-const nextId = useRef(0);
+
+
 
   const addOneRow=()=>{
     dispatch(addOneRowReducer({...voidData}));
@@ -61,6 +70,15 @@ const nextId = useRef(0);
   
    console.log("tableData",tableData.row);
  }
+//checkbox
+const onSelectionChanged=(event)=>{
+const selectedSpecDoc=event.api.getSelectedRows();
+setSpecDoc(selectedSpecDoc);
+}
+//selected SpecDoc Data
+const onSelectedSpecDoc=()=>{
+dispatch(regisSpecDoc(specDoc));
+}
  
   return (
     <>
@@ -74,9 +92,13 @@ const nextId = useRef(0);
           columnDefs={columnDefs}
           defaultColDef={defaultColDef}
           onCellClicked={onCellClicked}
+          rowSelection="multiple"
+          onSelectionChanged={onSelectionChanged}
+          rowMultiSelectWithClick={true}
+          suppressRowClickSelection={true}
           overlayNoRowsTemplate={"데이터를 추가해 주세요"}
         />
-
+      <Button onClick={() =>onSelectedSpecDoc()}variant="outlined">등록</Button>
     </div>
     </>
   )
