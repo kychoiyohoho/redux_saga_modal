@@ -15,6 +15,13 @@ const FirstAggrid = () => {
         { headerName: "Email", field: "email" },
         { headerName: "Phone", field: "phone" },
         { headerName: "Date of Birth", field: "dob" },
+        {headerName:"UploadFile", field:"uploadFile", 
+        cellRendererFramework:()=>(
+        <>
+        <label htmlFor="uploadFile">파일선택</label><input type="file" id="uploadFile"/>
+        </>
+        )},
+       
         {headerName:"변경사항저장",
         field:"modifiedData",
         cellRendererFramework:(params) =>(
@@ -43,7 +50,9 @@ const voidData={
   name:'',
   email:'',
   phone:'',
-  dob:''}]
+  dob:'',
+  uploadFile:'',
+}]
 
    
 };
